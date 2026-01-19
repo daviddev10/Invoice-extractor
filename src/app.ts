@@ -1,5 +1,5 @@
 import "dotenv/config"; // Variables de entorno
-import express from 'express';
+import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -17,6 +17,10 @@ app.use(cors({
 }));
 app.use(express.json()); // Middleware que transforma la req.body en un objeto JSON
 app.use(errorHandler);
+// Esta es la parte que te falta:
+app.get('/', (_req: Request, res: Response) => {
+  res.send('¡Servidor Inicio correctamente!');
+});
 app.use('/api', routes);
 app.use(morgan('dev'));
 

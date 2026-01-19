@@ -13,11 +13,11 @@ export class GeminiParseController {
                 return;
             }
 
-            // 2. Convertimos el Buffer del archivo directamente a Base64
+            // Convertimos el Buffer del archivo directamente a Base64
             const base64Data = req.file.buffer.toString('base64');
             const mimeType = req.file.mimetype;
 
-            // 3. Inicializamos Gemini
+            // Inicializamos Gemini
             const genAI = new GoogleGenerativeAI(this.GOOGLE_GEMINI_API_KEY);
             const model = genAI.getGenerativeModel({
                 model: "gemini-3-flash-preview"
