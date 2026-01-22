@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export class GeminiParseController {
 
 
+    private IA_MODEL = process.env.GOOGLE_GEMINI_MODEL || '';
     private GOOGLE_GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY || '';
 
     onParseDocument = async (req: Request, res: Response) => {
@@ -20,7 +21,7 @@ export class GeminiParseController {
             // Inicializamos Gemini
             const genAI = new GoogleGenerativeAI(this.GOOGLE_GEMINI_API_KEY);
             const model = genAI.getGenerativeModel({
-                model: "gemini-3-flash-preview"
+                model: this.IA_MODEL
             });
 
             const prompt = `
@@ -63,8 +64,13 @@ export class GeminiParseController {
 
 
         } catch (err: any) {
-            console.error("Error:", err.message);
-            res.status(500).json({ error: "Error procesando factura" });
+            if (err.status === 429) {
+                res.status(429).json({
+                    error: "Límite de pruebas diarias alcanzado. Por favor, contacta al administrador para subir al plan profesional."
+                });
+            } else {
+                res.status(500).json({ error: "Error interno en el servidor de IA" });
+            }
         }
     }
 
